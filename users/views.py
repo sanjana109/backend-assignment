@@ -58,12 +58,12 @@ def employeeApiUser(request, id=0):
         return Response(status=status.HTTP_200_OK)
  
 class EmployeePagination(PageNumberPagination, LimitOffsetPagination):
-    page_size_query_param = 'page_size'
+    page_size_query_param = 'limit'
     max_page_size = 10000
     page_query_param = 'page'
     default_limit = 5
-    limit_query_param = 'l'
-    max_limit = 50
+    #limit_query_param = 'l'
+    #max_limit = 50
 
 class EmployeeAPIView(generics.ListCreateAPIView):
     search_fields = ['first_name','last_name']
