@@ -4,7 +4,9 @@ Create REST APIs using Python (Flask, Django, any other web framework of your ch
 You can use database(i.e SQL, NOSQL) of your choice to store the data.  
 Take sample data from [here](https://datapeace-storage.s3-us-west-2.amazonaws.com/dummy_data/users.json).
 
-It should have following functionalities:
+The rest framework used here is Django and the database selected for managing the user data is MySQL. The user data has been taken from the sample data already given. It is assumed as employee (user) data. 
+
+It has the functionalities:
 
 - list users (`/api/users GET`)
 - search for a user by name
@@ -14,8 +16,6 @@ It should have following functionalities:
 - get detail of a user (`/api/users/<id> - GET`)
 - update details of a user (`/api/users - PUT`)
 - delete a user (`/api/users - DELETE`)
-
-_Attention to detail and meeting all requirements is important in the project. Completing it in less time will not give you any preference._
 
 ## **Task Overview**
 
@@ -68,7 +68,7 @@ Application should have the following endpoints:
       }
     ]
     ```
-
+- `/api/users/scan - GET` for supporting query parameters
   - Also, supports some query parameters:
   - page - a number for pagination
   - limit - no. of items to be returned, default limit is 5
@@ -150,6 +150,15 @@ Application should have the following endpoints:
 ## Resources:
 
 - For sample data [https://datapeace-storage.s3-us-west-2.amazonaws.com/dummy_data/users.json](https://datapeace-storage.s3-us-west-2.amazonaws.com/dummy_data/users.json)
+
+## How to setup and run this project:
+1) Install the latest version of Python. 
+2) Install Django and Django rest framework
+3) Install VS Code 
+4) Django project is `tvprojectnew` and the app is created within it called `users`.
+5) Run the app with `runserver`
+6) API documentation using Swagger
+7) This RestAPI is hosted on Heroku
 
 ## **Instructions**
 
