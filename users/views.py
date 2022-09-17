@@ -45,7 +45,7 @@ def employeeApiUser(request, id=0):
         employee_data=request.data
         print(id)
         employee=Employees.objects.get(id=id)
-        employees_serializer=EmployeeSerializer(employee,data=employee_data, partial=True)
+        employees_serializer=EmployeeSerializer(employee,data=employee_data, many=True)
         if employees_serializer.is_valid():
             employees_serializer.save()
             return Response(employees_serializer.data)
