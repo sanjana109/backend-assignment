@@ -1,5 +1,4 @@
 from functools import partial
-
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
@@ -18,22 +17,12 @@ from django.core.files.storage import default_storage
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-@api_view(['GET','POST','DELETE','PUT'])
-def employeeApi(request, id=0):
-        
+@api_view(['GET','POST'])
+def employeeApi(request):
     if request.method == 'GET':
-        print (id)
-        if(int(id)>0):
-           
-            employee=Employees.objects.filter(pk=id)
-            
-            employees_serializer=EmployeeSerializer(employee,many=True)
-            return JsonResponse(employees_serializer.data,safe=False)
-        else:
-            employee=Employees.objects.all()
-            #print(employee[0])
-            employees_serializer=EmployeeSerializer(employee,many=True)
-            return JsonResponse(employees_serializer.data,safe=False)
+        employee=Employees.objects.all()
+        employees_serializer=EmployeeSerializer(employee,many=True)
+        return JsonResponse(employees_serializer.data,safe=False)
     
     elif request.method=='POST':
         employee_data=JSONParser().parse(request)
@@ -43,6 +32,15 @@ def employeeApi(request, id=0):
             return JsonResponse("Inserted Successfully",safe=False)
         return Response(employees_serializer.errors,status=status.HTTP_400_BAD_REQUEST) 
 
+
+@api_view(['GET','DELETE','PUT'])
+def employeeApiUser(request, id=0):
+    if request.method == 'GET':
+        print (id)
+        if(int(id)>0):
+            employee=Employees.objects.filter(pk=id)
+            employees_serializer=EmployeeSerializer(employee,many=True)
+            return JsonResponse(employees_serializer.data,safe=False)
     elif request.method == 'PUT': 
         employee_data=JSONParser().parse(request)
         print(id)
@@ -66,7 +64,6 @@ def SaveFile(request):
     return JsonResponse(file_name,safe=False) 
  
 class EmployeePagination(PageNumberPagination, LimitOffsetPagination):
-    #page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 10000
     page_query_param = 'page'
