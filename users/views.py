@@ -1,6 +1,6 @@
 from functools import partial
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
+#from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from rest_framework.response import Response
@@ -22,14 +22,14 @@ def employeeApi(request):
     if request.method == 'GET':
         employee=Employees.objects.all()
         employees_serializer=EmployeeSerializer(employee,many=True)
-        return JsonResponse(employees_serializer.data,safe=False)
+        return Response(employees_serializer.data)
     
     elif request.method=='POST':
-        employee_data=JSONParser().parse(request)
+        employee_data=request.data
         employees_serializer=EmployeeSerializer(data=employee_data, many=True)
         if employees_serializer.is_valid():
             employees_serializer.save()
-            return JsonResponse("Inserted Successfully",safe=False)
+            return Response(employees_serializer.data)
         return Response(employees_serializer.errors,status=status.HTTP_400_BAD_REQUEST) 
 
 
@@ -40,28 +40,22 @@ def employeeApiUser(request, id=0):
         if(int(id)>0):
             employee=Employees.objects.filter(pk=id)
             employees_serializer=EmployeeSerializer(employee,many=True)
-            return JsonResponse(employees_serializer.data,safe=False)
+            return Response(employees_serializer.data)
     elif request.method == 'PUT': 
-        employee_data=JSONParser().parse(request)
+        employee_data=request.data
         print(id)
         employee=Employees.objects.get(id=id)
         employees_serializer=EmployeeSerializer(employee,data=employee_data, partial=True)
         if employees_serializer.is_valid():
             employees_serializer.save()
-            return JsonResponse("Updated Successfully",safe=False)
-        return JsonResponse("Failed to Update",safe=False) 
+            return Response(employees_serializer.data)
+        return Response(employees_serializer.errors,status=status.HTTP_400_BAD_REQUEST) 
 
     elif request.method=='DELETE':
         employee=Employees.objects.get(id=id)
         print(employee)
         employee.delete()
-        return JsonResponse("Deleted Successfully",safe=False)
-
-@csrf_exempt
-def SaveFile(request):
-    file=request.FILES['file']
-    file_name=default_storage.save(file.name,file)
-    return JsonResponse(file_name,safe=False) 
+        return Response(status=status.HTTP_200_OK)
  
 class EmployeePagination(PageNumberPagination, LimitOffsetPagination):
     page_size_query_param = 'page_size'
